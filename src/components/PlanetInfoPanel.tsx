@@ -47,12 +47,9 @@ export default function PlanetInfoPanel() {
   const handleDetailClick = (e: React.MouseEvent) => {
     e.preventDefault();
 
-    console.log('Detail clicked, planetInfoData:', planetInfoData);
-
     // リンクに応じて適切なモーダルを開く
     switch (planetInfoData.link) {
       case '#about':
-        console.log('Opening About modal');
         setIsTransitioning(true);
         setPlanetInfoData(null);
         setTimeout(() => {
@@ -62,7 +59,6 @@ export default function PlanetInfoPanel() {
         break;
 
       case '#projects':
-        console.log('Opening Projects modal');
         setIsTransitioning(true);
         setPlanetInfoData(null);
         setTimeout(() => {
@@ -72,7 +68,6 @@ export default function PlanetInfoPanel() {
         break;
 
       case '#services':
-        console.log('Opening Services modal');
         setIsTransitioning(true);
         setPlanetInfoData(null);
         setTimeout(() => {
@@ -82,7 +77,6 @@ export default function PlanetInfoPanel() {
         break;
 
       case '#contact':
-        console.log('Opening Contact modal');
         setIsTransitioning(true);
         setPlanetInfoData(null);
         setTimeout(() => {
@@ -92,8 +86,6 @@ export default function PlanetInfoPanel() {
         break;
 
       default:
-        // 他のページは通常のリンク動作（将来的に実装）
-        console.log('Navigate to:', planetInfoData.link);
         break;
     }
   };

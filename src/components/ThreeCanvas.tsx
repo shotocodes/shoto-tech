@@ -12,8 +12,6 @@ import { sunParticlesVertexShader, sunParticlesFragmentShader } from '@/lib/shad
 import { sunFlaresVertexShader, sunFlaresFragmentShader } from '@/lib/shaders/sunFlaresShader';
 
 export default function ThreeCanvas() {
-  console.log('ThreeCanvas rendered');
-
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
@@ -56,7 +54,6 @@ export default function ThreeCanvas() {
 
   useEffect(() => {
     configRef.current = config;
-    console.log('Config updated in ThreeCanvas:', config.orbitSpeed);
   }, [config]);
 
   useEffect(() => {
@@ -497,12 +494,10 @@ const handleClick = () => {
   const hasModal = document.body.classList.contains('modal-open');
 
   if (hasModal) {
-    console.log('Modal is open, click ignored');
     return;
   }
 
   const currentHoveredPlanet = hoveredPlanetRef.current;
-  console.log('Click detected, hoveredPlanet:', currentHoveredPlanet);
   if (!raycasterRef.current || !cameraRef.current) return;
 
   // 太陽クリック判定（パネルが開いてる時もブロック）
@@ -515,11 +510,9 @@ const handleClick = () => {
     if (sunIntersects.length > 0) {
       // パネルが開いてる時は太陽クリック無効
       if (hasPanel) {
-        console.log('Panel is open, sun click ignored');
         return;
       }
 
-      console.log('Sun clicked');
       document.body.style.transition = 'opacity 0.8s ease';
       document.body.style.opacity = '0';
       setTimeout(() => {
@@ -531,12 +524,9 @@ const handleClick = () => {
 
   // 惑星クリック判定（パネル開いてても切り替え可能）
   if (currentHoveredPlanet) {
-    console.log('Planet clicked:', currentHoveredPlanet.userData);
     const data = currentHoveredPlanet.userData;
     const currentLanguage = languageRef.current;
     const currentData = languageData[currentLanguage];
-
-    console.log('Current language:', currentLanguage);
 
     if (data.isActionPlanet) {
       if (data.action === 'controls') {
@@ -574,7 +564,6 @@ const handleClick = () => {
       const planetInfo = currentData.planets[planetKey];
 
       if (planetInfo) {
-        console.log('Setting planet info:', planetInfo);
         setPlanetInfoData({
           name: planetInfo.name,
           description: planetInfo.description,
@@ -628,14 +617,10 @@ const handleClick = () => {
       const planet = intersects[0].object as THREE.Mesh;
       hoveredPlanetRef.current = planet;
       setHoveredPlanet(planet);
-      console.log('Planet hovered:', planet.userData.name);
 
       planet.scale.setScalar(planet.userData.originalScale * 1.3);
       (planet.material as THREE.MeshPhongMaterial).emissive.setHex(0x333333);
     } else {
-      if (hoveredPlanetRef.current) {
-        console.log('Hover cleared');
-      }
       hoveredPlanetRef.current = null;
       setHoveredPlanet(null);
     }
