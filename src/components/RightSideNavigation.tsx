@@ -5,7 +5,8 @@ import { usePortfolioStore } from '@/store/usePortfolioStore';
 import { languageData } from '@/lib/data/languageData';
 
 export default function RightSideNavigation() {
-  const { language, setPlanetInfoData } = usePortfolioStore();
+  const language = usePortfolioStore((s) => s.language);
+  const setPlanetInfoData = usePortfolioStore((s) => s.setPlanetInfoData);
   const currentData = languageData[language];
 
   const handlePlanetClick = (planetType: 'about' | 'projects' | 'services' | 'contact') => {

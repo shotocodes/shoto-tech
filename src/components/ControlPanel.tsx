@@ -6,16 +6,15 @@ import { usePortfolioStore } from '@/store/usePortfolioStore';
 import { languageData } from '@/lib/data/languageData';
 
 export default function ControlPanel() {
-  const {
-    language,
-    config,
-    showControls,
-    setShowControls,
-    updateConfig,
-    toggleLanguage,
-    planetInfoData,
-    setPlanetInfoData
-  } = usePortfolioStore();
+  // 個別セレクタで購読し、他のストア変更で再レンダーしないようにする
+  const language = usePortfolioStore((s) => s.language);
+  const config = usePortfolioStore((s) => s.config);
+  const showControls = usePortfolioStore((s) => s.showControls);
+  const planetInfoData = usePortfolioStore((s) => s.planetInfoData);
+  const setShowControls = usePortfolioStore((s) => s.setShowControls);
+  const updateConfig = usePortfolioStore((s) => s.updateConfig);
+  const toggleLanguage = usePortfolioStore((s) => s.toggleLanguage);
+  const setPlanetInfoData = usePortfolioStore((s) => s.setPlanetInfoData);
 
   const currentData = languageData[language];
 

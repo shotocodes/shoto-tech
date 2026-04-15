@@ -6,18 +6,17 @@ import { usePortfolioStore } from '@/store/usePortfolioStore';
 import { languageData } from '@/lib/data/languageData';
 
 export default function PlanetInfoPanel() {
-  const {
-    language,
-    showPlanetInfo,
-    planetInfoData,
-    setPlanetInfoData,
-    setShowAboutModal,
-    setShowProjectModal,
-    setShowServiceModal,
-    setShowContactModal,
-    setIsTransitioning,
-    setShowControls // 追加
-  } = usePortfolioStore();
+  // 個別セレクタで購読（config/hoveredPlanet 等の変更で再レンダーしないように）
+  const language = usePortfolioStore((s) => s.language);
+  const showPlanetInfo = usePortfolioStore((s) => s.showPlanetInfo);
+  const planetInfoData = usePortfolioStore((s) => s.planetInfoData);
+  const setPlanetInfoData = usePortfolioStore((s) => s.setPlanetInfoData);
+  const setShowAboutModal = usePortfolioStore((s) => s.setShowAboutModal);
+  const setShowProjectModal = usePortfolioStore((s) => s.setShowProjectModal);
+  const setShowServiceModal = usePortfolioStore((s) => s.setShowServiceModal);
+  const setShowContactModal = usePortfolioStore((s) => s.setShowContactModal);
+  const setIsTransitioning = usePortfolioStore((s) => s.setIsTransitioning);
+  const setShowControls = usePortfolioStore((s) => s.setShowControls);
 
   const currentData = languageData[language];
 

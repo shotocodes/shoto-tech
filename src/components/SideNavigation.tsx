@@ -5,7 +5,11 @@ import { usePortfolioStore } from '@/store/usePortfolioStore';
 import { languageData } from '@/lib/data/languageData';
 
 export default function SideNavigation() {
-  const { language, toggleControls, setPlanetInfoData, showControls } = usePortfolioStore();
+  // 個別セレクタで購読（config や他の state 変更で再レンダーしないように）
+  const language = usePortfolioStore((s) => s.language);
+  const showControls = usePortfolioStore((s) => s.showControls);
+  const toggleControls = usePortfolioStore((s) => s.toggleControls);
+  const setPlanetInfoData = usePortfolioStore((s) => s.setPlanetInfoData);
   const currentData = languageData[language];
 
   const handleAction = (action: string) => {
