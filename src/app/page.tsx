@@ -2,6 +2,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import ThreeCanvas from '@/components/ThreeCanvas';
 import CustomCursor from '@/components/CustomCursor';
 import LeftInfo from '@/components/LeftInfo';
@@ -10,11 +11,14 @@ import ControlPanel from '@/components/ControlPanel';
 import PlanetInfoPanel from '@/components/PlanetInfoPanel';
 import SideNavigation from '@/components/SideNavigation';
 import RightSideNavigation from '@/components/RightSideNavigation';
-import AboutModal from '@/components/AboutModal';
-import ProjectModal from '@/components/ProjectModal';
-import ServiceModal from '@/components/ServiceModal';
-import ContactModal from '@/components/ContactModal';
 import { usePortfolioStore } from '@/store/usePortfolioStore';
+
+// モーダルは初回表示に不要なので動的 import でバンドル分離
+// (各モーダルは Three.js パーティクル系で重いため、実際に開かれるまで読み込まない)
+const AboutModal = dynamic(() => import('@/components/AboutModal'), { ssr: false });
+const ProjectModal = dynamic(() => import('@/components/ProjectModal'), { ssr: false });
+const ServiceModal = dynamic(() => import('@/components/ServiceModal'), { ssr: false });
+const ContactModal = dynamic(() => import('@/components/ContactModal'), { ssr: false });
 
 export default function Home() {
   const {
@@ -115,25 +119,34 @@ export default function Home() {
         <RightSideNavigation />
       </div>
 
-      <AboutModal
-        isOpen={showAboutModal}
-        onClose={() => setShowAboutModal(false)}
-      />
+      {/* モーダルは開いた時だけマウント（dynamic import と合わせて初回ロード軽減） */}
+      {showAboutModal && (
+        <AboutModal
+          isOpen={showAboutModal}
+          onClose={() => setShowAboutModal(false)}
+        />
+      )}
 
-      <ProjectModal
-        isOpen={showProjectModal}
-        onClose={() => setShowProjectModal(false)}
-      />
+      {showProjectModal && (
+        <ProjectModal
+          isOpen={showProjectModal}
+          onClose={() => setShowProjectModal(false)}
+        />
+      )}
 
-      <ServiceModal
-        isOpen={showServiceModal}
-        onClose={() => setShowServiceModal(false)}
-      />
+      {showServiceModal && (
+        <ServiceModal
+          isOpen={showServiceModal}
+          onClose={() => setShowServiceModal(false)}
+        />
+      )}
 
-      <ContactModal
-        isOpen={showContactModal}
-        onClose={() => setShowContactModal(false)}
-      />
+      {showContactModal && (
+        <ContactModal
+          isOpen={showContactModal}
+          onClose={() => setShowContactModal(false)}
+        />
+      )}
     </>
   );
 }
