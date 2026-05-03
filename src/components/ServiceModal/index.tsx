@@ -3,6 +3,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { usePortfolioStore } from '@/store/usePortfolioStore';
+import { getDefaultParticleCount } from '@/lib/utils/device';
 import ParticleMorphing from './ParticleMorphing';
 import ServiceSettingsPanel from './ServiceSettingsPanel';
 import styles from './ServiceModal.module.css';
@@ -16,7 +17,7 @@ export default function ServiceModal({ isOpen, onClose }: ServiceModalProps) {
   const { setShowContactModal, setIsTransitioning } = usePortfolioStore();
   const [showSettings, setShowSettings] = useState(false);
   const [shapeType, setShapeType] = useState<'box' | 'pyramid'>('box');
-  const [particleCount, setParticleCount] = useState(15000);
+  const [particleCount, setParticleCount] = useState(getDefaultParticleCount);
   const [warpMode, setWarpMode] = useState(false);
   const [magneticMode, setMagneticMode] = useState(false);
   const [displayedText, setDisplayedText] = useState('');

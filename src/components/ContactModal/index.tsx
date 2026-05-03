@@ -2,6 +2,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { getDefaultParticleCount } from '@/lib/utils/device';
 import ParticleMorphing from './ParticleMorphing';
 import ContactSettingsPanel from './ContactSettingsPanel';
 import styles from './ContactModal.module.css';
@@ -14,7 +15,7 @@ interface ContactModalProps {
 export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
   const [showSettings, setShowSettings] = useState(false);
   const [shapeType, setShapeType] = useState<'cone' | 'ring'>('cone');
-  const [particleCount, setParticleCount] = useState(15000);
+  const [particleCount, setParticleCount] = useState(getDefaultParticleCount);
   const [warpMode, setWarpMode] = useState(false);
   const [magneticMode, setMagneticMode] = useState(false);
   const [displayedText, setDisplayedText] = useState('');

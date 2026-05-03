@@ -2,6 +2,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { getDefaultParticleCount } from '@/lib/utils/device';
 import ParticleSphere from './ParticleSphere';
 import SettingsPanel from './SettingsPanel';
 import ValueProposition from './ValueProposition';
@@ -20,7 +21,7 @@ interface AboutModalProps {
 export default function AboutModal({ isOpen, onClose }: AboutModalProps) {
   const [morphToIcosahedron, setMorphToIcosahedron] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [particleCount, setParticleCount] = useState(15000);
+  const [particleCount, setParticleCount] = useState(getDefaultParticleCount);
   const [warpMode, setWarpMode] = useState(false);
   const [magneticMode, setMagneticMode] = useState(false);
 

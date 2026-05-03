@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { usePortfolioStore } from '@/store/usePortfolioStore';
+import { getDefaultParticleCount } from '@/lib/utils/device';
 import ParticleMorphing from './ParticleMorphing';
 import ProjectSettingsPanel from './ProjectSettingsPanel';
 import styles from './ProjectModal.module.css';
@@ -16,7 +17,7 @@ export default function ProjectModal({ isOpen, onClose }: ProjectModalProps) {
   const { setShowContactModal, setIsTransitioning } = usePortfolioStore();
   const [showSettings, setShowSettings] = useState(false);
   const [shapeType, setShapeType] = useState<'torusKnot' | 'helix'>('torusKnot');
-  const [particleCount, setParticleCount] = useState(15000);
+  const [particleCount, setParticleCount] = useState(getDefaultParticleCount);
   const [warpMode, setWarpMode] = useState(false);
   const [magneticMode, setMagneticMode] = useState(false);
   const [displayedText, setDisplayedText] = useState('');
