@@ -29,11 +29,9 @@ export default function ThreeCanvas() {
   const cursorRef = useRef<HTMLDivElement | null>(null);
   const hoveredPlanetRef = useRef<THREE.Mesh | null>(null);
 
-  const {
-    setPlanetInfoData,
-    setHoveredPlanet,
-    hoveredPlanet
-  } = usePortfolioStore();
+  // ref 経由でホバー状態を持つので store からは setter だけ取得（再レンダー回避）
+  const setPlanetInfoData = usePortfolioStore((state) => state.setPlanetInfoData);
+  const setHoveredPlanet = usePortfolioStore((state) => state.setHoveredPlanet);
 
   // languageもrefで管理
   const language = usePortfolioStore((state) => state.language, shallow);
@@ -188,15 +186,12 @@ export default function ThreeCanvas() {
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', handleResize);
 
-      // Three.jsオブジェクトの破棄
+      // Three.jsオブジェクトの破棄（Mesh + Points 両方）
       scene.traverse((object) => {
-        if (object instanceof THREE.Mesh) {
+        if (object instanceof THREE.Mesh || object instanceof THREE.Points) {
           object.geometry.dispose();
-          if (Array.isArray(object.material)) {
-            object.material.forEach(mat => mat.dispose());
-          } else {
-            object.material.dispose();
-          }
+          const materials = Array.isArray(object.material) ? object.material : [object.material];
+          materials.forEach((mat) => mat.dispose());
         }
       });
       renderer.dispose();
@@ -222,10 +217,14 @@ export default function ThreeCanvas() {
       sunFlaresRef.current.scale.setScalar(config.sunSize);
     }
 
-    // 太陽パーティクル数の更新
+    // 太陽パーティクル数の更新（GPU メモリリーク防止で古い geometry/material を dispose）
     if (config.sunParticleCount !== sunParticlesRef.current?.userData.particleCount) {
       if (sceneRef.current && sunParticlesRef.current) {
-        sceneRef.current.remove(sunParticlesRef.current);
+        const old = sunParticlesRef.current;
+        sceneRef.current.remove(old);
+        old.geometry.dispose();
+        const mat = Array.isArray(old.material) ? old.material : [old.material];
+        mat.forEach((m) => m.dispose());
         createSunParticles(sceneRef.current);
       }
     }
@@ -612,15 +611,17 @@ const handleClick = () => {
       }
     }
 
-    // 惑星のホバー処理
+    // 惑星のホバー処理（ホバー対象が変わった時だけ store を更新して再レンダーを抑制）
     if (intersects.length > 0) {
       const planet = intersects[0].object as THREE.Mesh;
-      hoveredPlanetRef.current = planet;
-      setHoveredPlanet(planet);
+      if (hoveredPlanetRef.current !== planet) {
+        hoveredPlanetRef.current = planet;
+        setHoveredPlanet(planet);
+      }
 
       planet.scale.setScalar(planet.userData.originalScale * 1.3);
       (planet.material as THREE.MeshPhongMaterial).emissive.setHex(0x333333);
-    } else {
+    } else if (hoveredPlanetRef.current !== null) {
       hoveredPlanetRef.current = null;
       setHoveredPlanet(null);
     }
